@@ -6,9 +6,10 @@
   <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body style="display: flex;">
-  <div id="chart-info" style="line-height: 35px;padding-top: 40px;padding-left: 10px; flex: 1;background-color: #f0f0f0;width: 20%;">
-    Click on each country in the adjoining map, to explore for yourself how that country scores on the Health metrics discussed in the previous pages. <br/> 
+  <div id="chart-info" style="line-height: 35px;padding-top: 10px;padding-left: 10px; flex: 1;background-color: #f0f0f0;width: 20%;">
+    <b><u>Click on each country in the adjoining map</u></b>, to explore for yourself how that country scores on the Health metrics, displayed in the table below. <br/> 
     Countries are shaded based on their population; darker the shade of blue, more populated it is.  
+    <br/>
     <br/>
     <!--<select id="country-dropdown"></select>-->
     <div id="table-container">
@@ -16,13 +17,15 @@
       <table id="data-table">
         <thead>
           <tr>
-            <th>Metric</th>
+            <th>Parameters</th>
             <th>Value</th>
           </tr>
         </thead>
         <tbody></tbody>
       </table>
     </div>
+    <br/>
+    You may close the browser window when you are done. Thank you. 
   </div>
   <div id="chart-container1"  style="flex: 4;background-color: #e0e0e0;width: 80%;">
     <!-- Your D3 visualization will be added here -->

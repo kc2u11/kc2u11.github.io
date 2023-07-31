@@ -78,7 +78,7 @@ d3.csv("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/wo
       .annotations([
         {
           note: {
-            label: 'Population: '+d.total.toLocaleString(),
+            label: 'Population: '+d.total.toLocaleString() + ', GDP per capita: '+getGdpPerCapita(countryName),
             bgPadding: 20,
             title: countryName, 
             wrap: 200
@@ -129,6 +129,17 @@ d3.csv("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/wo
         ; // Add the onclick event handler
 
   }); 
+
+  function getGdpPerCapita(countryName) {
+    for (let entry of data4) {
+        if (entry["Country"] === countryName) {
+          if (entry["GDP per capita"] != null) {
+            return entry["GDP per capita"].toLocaleString();
+          }
+        }
+    }
+    return null;  // Return null if the country is not found in the JSON array
+  }
 
   // Sample input data for the function
   const metrics = ['Life Expectancy', 'Care System Score', 'Death Rate', 'Depression Rate', 'Health Score', 'Cardiovascular deaths'];
@@ -1760,160 +1771,36 @@ d3.csv("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/wo
     newRows.append("td").text(d => d[0]);
     newRows.append("td").text(d => d[1]);
 
-    //Highlight country 
-    //svg.selectAll('.annotation-group').remove();
-    //createAnnotationOverCountry(selectedCountry); 
+
     
   }
 
-  function calculateBoundingBox(path) {
-    const pathCommands = path.getAttribute("d").match(/[A-Za-z][^A-Za-z]*/g);
-
-    let minX = Infinity;
-    let minY = Infinity;
-    let maxX = -Infinity;
-    let maxY = -Infinity;
-
-    pathCommands.forEach(command => {
-      const values = command.trim().split(/[ ,]/).map(parseFloat);
-      const commandType = command.charAt(0);
-
-      if (commandType === "M" || commandType === "L") {
-        const x = values[0];
-        const y = values[1];
-
-        minX = Math.min(minX, x);
-        minY = Math.min(minY, y);
-        maxX = Math.max(maxX, x);
-        maxY = Math.max(maxY, y);
-      } else if (commandType === "Z") {
-        // Ignore "Z" command (close path)
-      }
-    });
-
-    return { x: minX, y: minY, width: maxX - minX, height: maxY - minY };
-  }
-
-  function getOffset(el) {
-    const rect = el.getBoundingClientRect();
-    console.log(rect.left, rect.top);
-    return {
-      left: rect.left + window.scrollX,
-      top: rect.top + window.scrollY
-      
-    };
-  }
-
-  function createAnnotationOverCountry(countryName) { 
-    const pathElementName = '#path-'+ countryName; 
-    console.log(pathElementName, d3.select(pathElementName).datum('d'));
-    d3.select(pathElementName).transition()
-      .duration(200).style('opacity', 0.1);
-
-    // Add the annotation on the clicked country
-    const annotation = d3.annotation()
-    .type(d3.annotationCallout)
-    .annotations([
-      {
-        note: {
-          label: 'Population: ',
-          bgPadding: 20,
-          title: countryName, 
-          wrap: 200
-        },
-        connector: {
-          end: "dot" // 'arrow' also available
-        },
-        //data: { population: d.total, code: d.id },
-        className: "show-bg",
-        x: 500,
-        y: 500,
-        dx: 50, 
-        dy: 50
-      },
-    ]);
-
-    //d3.select(pathElementName)
-    svg
-    .append('g')
-      .attr('class', 'annotation-group')
-      .call(annotation);
-
-
-    //getOffset(d3.select(pathElementName)); 
-
-    /*const bbox = calculateBoundingBox(d3.select(pathElementName));
-    const bbox = d3.select(pathElementName).node().getBBox();
-
-    // Calculate the center coordinates
-    const centerX = bbox.x + bbox.width / 2;
-    const centerY = bbox.y + bbox.height / 2;
-
-    console.log("Center X:", centerX);
-    console.log("Center Y:", centerY);*/
-  }
-
   // Initial update with the first country in the dropdown
-  updateTable(data4[0].Country);
+  updateTable(data4[168].Country);
 
-  dropdown.on("change", function() {
-    const selectedCountry = this.value;
-    updateTable(selectedCountry);
-  });
-  /*
-  function handleDropdownChange() {
-    // Get the selected option value
-    const selectedValue = d3.select("#country-dropdown").node().value;
-    console.log("Selected Value:", selectedValue);
-    // Call your custom function or perform actions based on the selected value
-    // Select the table cells and update their contents based on the selected value
-    const tableData = d3.select("#table-container").selectAll("td");
-    tableData.each(function(d, i) {
-      if (i % 2 === 0) {
-        // Update the first cell based on the selected value
-        d3.select(this).text(metrics[i]);
-      } 
-    });
+  // Add the annotation on the clicked country
+  const annotationUSA = d3.annotation()
+  .type(d3.annotationCallout)
+  .annotations([
+    {
+      note: {
+        label: 'Population: 299,846,449, GDP per capita: '+getGdpPerCapita(data4[168].Country),
+        bgPadding: 20,
+        title: data4[168].Country, 
+        wrap: 200
+      },
+      connector: {
+        end: "dot" // 'arrow' also available
+      },
+      className: "show-bg",
+      x: sideContainerWidth+50,
+      y: 350,
+      dx: -50, 
+      dy: 50
+    },
+  ]);
+
+  svg.append('g')
+    .attr('class', 'annotation-group')
+    .call(annotationUSA);
   
-  }
-
-  // JavaScript function to look up data from the JSON object
-  function getValueFromLookup(dataitem, item) {
-    return dataitem.item.toString();
-  }
-
-  
-  // Create the table using D3
-  const tableContainer = d3.select('#table-container');
-  const table = tableContainer.append('table');
-
-  // Create the table header
-  const headerRow = table.append('tr');
-  headerRow.append('th').text('Item');
-  headerRow.append('th').text('Value');
-
-  // Populate the table with data
-  const tableBody = table.append('tbody');
-  
-  var table_rows = d3.selectAll('tbody')
-    .data(data4)
-    .enter()
-    .append('tr')
-    .append('td').text(d, i => d[])
-    .append('td').text()
-
-  const selectedValue = d3.select("#country-dropdown").node().value;
-  function findElementByKey(selectedValue) {
-    for (i in data4.length) {
-      if (data4[i]['Country'] === selectedValue) {
-        return data4[i]; 
-      }
-    }
-  }
-
-  metrics.forEach(item => {
-    const row = tableBody.append('tr');
-    row.append('td').text(item);
-    row.append('td').text(getValueFromLookup(findElementByKey(selectedValue),item));
-  });
-*/

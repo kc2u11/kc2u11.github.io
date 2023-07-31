@@ -2,6 +2,24 @@
 const containerWidth = document.getElementById('chart-container').clientWidth;
 const containerHeight = document.getElementById('chart-container').clientHeight;
 
+
+window.onload = function() {
+  // Check if the window has a resizeTo function (some browsers might block it)
+  if (typeof window.resizeTo === 'function') {
+      // Set the window size to the screen size
+      window.resizeTo(screen.width, screen.height);
+  }
+  if (screen.width < 1500 || screen.height < 600 || containerWidth < 1500 || containerHeight< 600) { 
+    document.getElementById('myModal').style.display = 'block';
+  }
+};
+
+// Function to close the modal
+function closeModal() {
+  document.getElementById('myModal').style.display = 'none';
+}
+
+
 console.log(containerWidth + ' ' + containerHeight); 
 // Create an SVG element within the container
 const svg = d3.select("#chart-container")
@@ -100,6 +118,35 @@ svg.append("text")
   .attr("y", 570)
   .text("In 2022, the United States spent an estimated $12,555 per person on healthcare — over twice the average of other wealthy countries.")
   ;
+
+  const annotation = d3.annotation()
+  .type(d3.annotationCallout)
+  .annotations([
+    {
+      note: {
+        label: 'Five largest economy countries with above median GDP were included.',
+        bgPadding: 20,
+        title: 'Average per-capita healthcare spending, excluding US', 
+        wrap: 400
+      },
+      connector: {
+        end: "dot" // 'arrow' also available
+      },
+      data: { countries: 'Average', costs: 6416 },
+      className: "show-bg",
+      x: 580,
+      y: 330,
+      dx: 50, 
+      dy: 10
+    },
+
+  ]);
+
+  svg.append('g')
+    .attr('class', 'annotation-group')
+    .call(annotation)
+    .transition()
+    .delay(1000);  
   
 
 svg.append("text")
@@ -133,22 +180,3 @@ const buttonText = svg.append("text")
 buttonRect.on("click", () => {
     window.location.href = "page2.html";
 });
-
-//""
-
-// Add each line of text using <tspan> elements
-/*
-text.selectAll("tspan")
-  .data(lines)
-  .enter()
-  .append("tspan")
-  .attr("x", 600)
-  .attr("dy", "5em") // Line height spacing (adjust as needed)
-  .text((d) => d);
-
-   <p class="footnote"> <br/>
-  Notes: Data are from 2022 and include provisional values from some countries. Average does not include the United States. 
-  The five countries with the largest economies and those with both an above median GDP and GDP per capita, relative to all OECD countries were included. 
-  Chart uses purchase power parities to convert data into US dollars. 
-  </p>
-  */  

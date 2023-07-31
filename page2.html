@@ -3,8 +3,8 @@
 <style> rect {fill: lightblue; stroke: black; }</style>
 <body>
 
-<script src="script1.js"></script>
 <script src="d3.parcoords.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-annotation/2.5.1/d3-annotation.min.js"></script>
 <link rel="stylesheet" type="text/css" href="d3.parcoords.css">
 <link rel="stylesheet" type="text/css" href="styles.css">
 <div id="chart-container">
@@ -95,10 +95,39 @@ var pc5 = d3.parcoords()("#example5");
     .render()
     .createAxes()  // enable brushing
     //.color(function(d) { return blue_to_brown(d["Care System Score"]); });
-
-
 </script>
 
+<script src="https://d3js.org/d3.v6.min.js">
+const annotation = d3.annotation()
+  .type(d3.annotationCallout)
+  .annotations([
+    {
+      note: {
+        label: 'For the sample countries from each continent, score was higher than only Kenya',
+        bgPadding: 20,
+        title: 'Health Score for USA', 
+        wrap: 400
+      },
+      connector: {
+        end: "dot" // 'arrow' also available
+      },
+      className: "show-bg",
+      x: 700,
+      y: 400,
+      dx: 100, 
+      dy: 50
+    },
+
+  ]);
+
+  svg.selectAll('svg').append('g')
+    .attr('class', 'annotation-group')
+    .call(annotation)
+    .transition()
+    .delay(1000);  
+  
+
+</script>
 
 
 </body>

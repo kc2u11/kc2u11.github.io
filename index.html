@@ -6,11 +6,19 @@
   <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
+  <div id="myModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeModal()">&times;</span>
+        <p>Please maximize your browser window for the best experience and refresh the page. <br/>
+        This visualization is best viewed with a minimum resolution of 1600 x 900 pixels.</p>
+    </div>
+  </div>
   <div id="chart-container">
     <!-- Your D3 visualization will be added here -->
   </div>
   
   <script src="https://d3js.org/d3.v6.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-annotation/2.5.1/d3-annotation.min.js"></script>
   <script src="script.js">
     // Your D3 code will be added here
   </script>
