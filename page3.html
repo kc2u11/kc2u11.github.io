@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Narrative visualization on Healthcare costs across the world</title>
+  <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body style="display: flex;">
+  <div id="chart-info" style="line-height: 35px;padding-top: 40px;padding-left: 10px; flex: 1;background-color: #f0f0f0;width: 20%;">
+    Click on each country in the adjoining map, to explore for yourself how that country scores on the Health metrics discussed in the previous pages. <br/> 
+    Countries are shaded based on their population; darker the shade of blue, more populated it is.  
+    <br/>
+    <!--<select id="country-dropdown"></select>-->
+    <div id="table-container">
+      <!-- Table to hold the data -->
+      <table id="data-table">
+        <thead>
+          <tr>
+            <th>Metric</th>
+            <th>Value</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+  <div id="chart-container1"  style="flex: 4;background-color: #e0e0e0;width: 80%;">
+    <!-- Your D3 visualization will be added here -->
+  </div>
+  
+  <script src="https://d3js.org/d3.v6.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-annotation/2.5.1/d3-annotation.min.js"></script>
+  <script src="script3.js">
+    // Your D3 code will be added here
+  </script>
+</body>
+</html>
